@@ -4,18 +4,76 @@
 var CLIENT_ID = '204251467419-6vrsj8f29kl1e2v8f0p6bp3802lm31i4.apps.googleusercontent.com';
 var SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 var SPREAD_SHEET_ID = "1CIIEs7xbvf65NMrUMkfB0YFdpq1l2BSilAzIqj42A8c";
+
+var PAYMENT_TYPE_ENUM = {
+  "payment-type-cash": "Cash",
+  "payment-type-jaccs": "Visa Jaccs",
+  "payment-type-splitwise": "Splitwise"
+}
+
+var CATEGORY_TYPE_ENUM = {
+  "category-type-sdc": "Soft Drink, Coffee",
+  "category-type-grocry": "Grocery",
+  "category-type-lunch": "Lunch",
+  "category-type-dinner": "Dinner",
+  "category-type-brkfst": "Breakfast"
+}
+
+var CATEGORY_TYPE = "Grocery";  // Default selected
+// Visa Jaccs ; Splitwise ; Master Amazon ; Visa Rakuten
+var PAYMENT_TYPE = "Visa Jaccs" // Default selected
+
 /**
  * Check if current user has authorized this application.
  */
 function checkAuth() {
-  console.log("Check Auth")
-
   gapi.auth.authorize(
     {
     'client_id': CLIENT_ID,
     'scope': SCOPES.join(' '),
     'immediate': true
     }, handleAuthResult);
+}
+
+/**
+* Remove the selected class from all elements of the given className
+*
+* @param {className} class of the elements to be changed
+*/
+function removeHighlight(className) {
+  var buttons = document.getElementsByClassName(className);
+  for (var i = 0; i < buttons.length; i++){
+    buttons[i].classList.remove("selected");
+  }
+}
+
+/**
+* Change the payment type
+*
+* @param {Event} event Button click event.
+*/
+function togglePaymentType(event) {
+  var target = event.target.id;
+  PAYMENT_TYPE = PAYMENT_TYPE_ENUM[target];
+  removeHighlight("payment-type-button");
+  document.getElementById(target).classList.add("selected")
+}
+
+/**
+* Change the category type
+*
+* @param {Event} event Button click event.
+*/
+function toggleCategoryType(event) {
+  var target = event.target.id;
+  removeHighlight("category-type-button");
+  document.getElementById(target).classList.add("selected");
+  CATEGORY_TYPE = CATEGORY_TYPE_ENUM[target];
+}
+
+function categoryDropDown(event) {
+  removeHighlight("category-type-button");
+  CATEGORY_TYPE = document.getElementById("category").value;
 }
 
 /**
@@ -52,7 +110,6 @@ function handleAuthClick(event) {
  * Load Sheets API client library.
  */
 function loadSheetsApi() {
-  console.log("LOADING SHEETS")
   var discoveryUrl =
   'https://sheets.googleapis.com/$discovery/rest?version=v4';
   gapi.client.load(discoveryUrl).then(getSummaries);
@@ -68,25 +125,16 @@ function getSheetName(date) {
 }
 
 function handleAddExpense() {
-
-  console.log("Handle Expense")
   toggleButtonAndLoading();
-
-  var date = document.getElementById('date').value;
   var amount = document.getElementById('amount').value;
 
   if (amount !== "") {
-    var category = document.getElementById('category').value;
+    var date = document.getElementById('date').value;
     var comment = document.getElementById('comment').value;
-    var paymentType = document.getElementById('paymentType').value;
-
-    console.log(date, amount, category, comment, paymentType)
 
     var spreadsheetId = SPREAD_SHEET_ID;
     var sheetName = getSheetName(date)
-    console.log(sheetName)
-    var range = sheetName + "!A2:F2"
-
+    var range = sheetName + "!A2:E2"
     gapi.client.sheets.spreadsheets.values.append({
       spreadsheetId: spreadsheetId,
       range: range,
@@ -94,7 +142,7 @@ function handleAddExpense() {
       insertDataOption:  "INSERT_ROWS",
       "majorDimension": "ROWS",
       "values": [
-      [date, amount, category, comment, paymentType]
+      [date, amount, CATEGORY_TYPE, comment, PAYMENT_TYPE]
       ]
     }).then(function(response) {
       console.log(response);
@@ -106,15 +154,12 @@ function handleAddExpense() {
 }
 
 function toggleButtonAndLoading(){
-  console.log("Toggling Classes")
-
   document.getElementById("spinner").classList.toggle("hidden-element");
   document.getElementById("addDiv").classList.toggle("hidden-element");
 }
 
 function getLast5Entries(response){
   var updatedRange = response.result.updates.updatedRange
-  console.log(updatedRange)
   var startInd = updatedRange.indexOf("!");
   var endInd = updatedRange.indexOf(":");
   var rowNumberEnd = parseInt(updatedRange.substr(startInd+2, endInd));
@@ -126,12 +171,10 @@ function getLast5Entries(response){
     spreadsheetId: SPREAD_SHEET_ID,
     range: rangeRequired,
   }).then(function(response) {
-    console.log(response.result)
     showLast5Entries(response.result.values);
   }, function(response) {
     appendPre('Error: ' + response.result.error.message);
   });
-  console.log(rangeRequired)
 }
 
 function showLast5Entries(values){
@@ -178,15 +221,11 @@ function getSummaries() {
 function showSummaries(values) {
   var summaryContainer = document.getElementById('summary-container');
   summaryContainer.innerHTML = "";
-
-  var total = values.pop();
-  appendSummary(summaryContainer, total, 0);
-
   var sorted = values.sort(function(a, b) { return ((a[1] - b[1]) > 0) ? 1 : -1; }).reverse();
 
-  for (i = 0; i <= 3 ; i++) {
+  for (i = 0; i <= 4 ; i++) {
     var row = sorted[i];
-    appendSummary(summaryContainer, row, i+1);
+    appendSummary(summaryContainer, row, i);
   }
 }
 
@@ -199,8 +238,6 @@ function appendSummary(summaryContainer, data, index) {
 }
 
 window.onload = function(e) {
-  console.log(new Date())
-  console.log(document.getElementById('date'))
   document.getElementById('date').valueAsDate = new Date();
   document.getElementById('amount').focus();
 }
