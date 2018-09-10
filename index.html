@@ -3,7 +3,7 @@
 
   <script src="./script.js">
   </script>
-  <script src="https://apis.google.com/js/client.js?onload=checkAuth"> 
+  <script src="https://apis.google.com/js/client.js?onload=checkAuth">
   </script>
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -21,23 +21,26 @@
       </div>
 
       <div class="form-item input-container date">
-        <input class="formInput" id="date" type="date" required="required" placeholder="Date" /> 
+        <input class="formInput" id="date" type="date" required="required" placeholder="Date" />
       </div>
 
-      <div class="form-item amount">
-        <div class="placeholder">AMOUNT</div>
-        <input class="formInput" id="amount" type="number" />         
+      <div class='payment-type'>
+        <button class="payment-type-button" id="payment-type-cash" onclick="togglePaymentType(event)">
+          Cash
+        </button>
+        <button class="selected payment-type-button" id="payment-type-jaccs" onclick="togglePaymentType(event)">
+          Jaccs
+        </button>
+        <button class="payment-type-button" id="payment-type-splitwise" onclick="togglePaymentType(event)">
+          Splitwise
+        </button>
       </div>
 
-      <div class="form-item input-container">
+      <div class="form-item input-container" onchange="categoryDropDown(event)">
         <select  class="formInput" id="category">
-          <option value="Lunch">Lunch</option>
-          <option value="Dinner">Dinner</option>
-          <option value="Grocery">Grocery</option>
           <option value="Entertainment">Entertainment</option>
           <option value="Transport">Transport</option>
           <option value="Toiletries">Toiletries</option>
-          <option value="Soft Drink, Coffee">Soft Drink, Coffee</option>
           <option value="Alcohol">Alcohol</option>
           <option value="Conbini">Conbini</option>
           <option value="Other">Other</option>
@@ -46,17 +49,33 @@
         </select>
       </div>
 
-      <div class="form-item input-container">
-        <select  class="formInput" id="paymentType">
-          <option value="Cash">Cash</option>
-          <option value="Visa SMBC">Visa SMBC</option>
-          <option value="JCB SMBC">JCB SMBC</option>
-          <option value="Splitwise">Splitwise</option>
-        </select>
+      <div class='category-type'>
+        <button class="category-type-button" id="category-type-sdc" onclick="toggleCategoryType(event)">
+          Soft Drink, Coffee
+        </button>
+        <button class="selected category-type-button" id="category-type-grocry" onclick="toggleCategoryType(event)">
+          Grocery
+        </button>
+      </div>
+      <div class='category-type'>
+        <button class="category-type-button" id="category-type-lunch" onclick="toggleCategoryType(event)">
+          Lunch
+        </button>
+        <button class="category-type-button" id="category-type-dinner" onclick="toggleCategoryType(event)">
+          Dinner
+        </button>
+        <button class="category-type-button" id="category-type-brkfst" onclick="toggleCategoryType(event)">
+          Breakfast
+        </button>
+      </div>
+
+      <div class="form-item amount">
+        <div class="placeholder">AMOUNT</div>
+        <input class="formInput" id="amount" type="number" />
       </div>
 
       <div class="form-item comment-box">
-        <input  class="formInput" id="comment" type="text" placeholder="Comment, if any" /> 
+        <input  class="formInput" id="comment" type="text" placeholder="Comment, if any" />
       </div>
 
       <div  id="addDiv" class="form-item btn-container hidden-element">

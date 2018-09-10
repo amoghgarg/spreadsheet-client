@@ -64,13 +64,28 @@ div {
 	outline: 0;
 }
 
+.category-type, .payment-type {
+  display: flex;
+}
+
+.category-type-button, .payment-type button {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 40px;
+}
+
+.selected {
+  background: #147b4a;
+}
+
 button {
   border: 0;
-  border-radius: 5px;
   font-size: 20px;
-  max-height: 70px;
+  max-height: 110px;
+  margin: 10px;
   color: white;
   background: #0da95f;
+  border-radius: 10px;
 }
 
 input {
@@ -84,7 +99,7 @@ input {
 }
 
 .comment-box {
-	max-height: 300px;
+	max-height: 150px;
 }
 
 input, select, button {
