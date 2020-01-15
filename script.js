@@ -125,12 +125,13 @@ function getSheetName(date) {
 }
 
 function handleAddExpense() {
-  toggleButtonAndLoading();
-  var amount = document.getElementById('amount').value;
+  var amountNcomment = document.getElementById('amountNcomment').value;
+  var amount = amountNcomment.split(" ")[0];
+  var comment = amountNcomment.substr(amount.length+1);
 
-  if (amount !== "") {
+  if (!isNaN(parseInt(amount))) {
+    toggleButtonAndLoading();
     var date = document.getElementById('date').value;
-    var comment = document.getElementById('comment').value;
 
     var spreadsheetId = SPREAD_SHEET_ID;
     var sheetName = getSheetName(date)
@@ -239,5 +240,5 @@ function appendSummary(summaryContainer, data, index) {
 
 window.onload = function(e) {
   document.getElementById('date').valueAsDate = new Date();
-  document.getElementById('amount').focus();
+  document.getElementById('amountNcomment').focus();
 }
