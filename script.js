@@ -1,7 +1,7 @@
 
 // Your Client ID can be retrieved from your project in the Google
 // Developer Console, https://console.developers.google.com
-var CLIENT_ID = '204251467419-6vrsj8f29kl1e2v8f0p6bp3802lm31i4.apps.googleusercontent.com';
+var CLIENT_ID = '209770068682-ht8k3iv5rin720cps3e8k0rl7sc9mgh4.apps.googleusercontent.com';
 var SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 var SPREAD_SHEET_ID = "1CIIEs7xbvf65NMrUMkfB0YFdpq1l2BSilAzIqj42A8c";
 
