@@ -8,7 +8,8 @@ var SPREAD_SHEET_ID = "1CIIEs7xbvf65NMrUMkfB0YFdpq1l2BSilAzIqj42A8c";
 var PAYMENT_TYPE_ENUM = {
   "payment-type-cash": "Cash",
   "payment-type-jaccs": "Visa Jaccs",
-  "payment-type-splitwise": "Splitwise"
+  "payment-type-splitwise": "Splitwise",
+  "payment-type-paypay": "PayPay"
 }
 
 var CATEGORY_TYPE_ENUM = {
